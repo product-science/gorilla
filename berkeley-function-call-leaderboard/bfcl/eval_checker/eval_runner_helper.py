@@ -2,6 +2,7 @@ import os
 import statistics
 from datetime import datetime
 from pathlib import Path
+from collections import defaultdict
 
 import numpy as np
 import pandas as pd
@@ -177,7 +178,7 @@ def record_cost_latency(leaderboard_table, model_name, model_output_data):
                     output_list.append(data[key])
 
     if model_name not in leaderboard_table:
-        leaderboard_table[model_name] = {}
+        leaderboard_table[model_name] = defaultdict(default=dict)
         leaderboard_table[model_name]["cost"] = {"input_data": [], "output_data": []}
         leaderboard_table[model_name]["latency"] = {"data": []}
 
@@ -326,7 +327,7 @@ def generate_leaderboard_csv(
         data_non_live.append(
             [
                 "N/A",
-                MODEL_METADATA_MAPPING[model_name_escaped][0],
+                MODEL_METADATA_MAPPING.get(model_name_escaped, [model_name_escaped])[0],
                 overall_accuracy_non_live["accuracy"],
                 summary_ast_non_live["accuracy"],
                 summary_exec_non_live["accuracy"],
@@ -387,7 +388,7 @@ def generate_leaderboard_csv(
         data_live.append(
             [
                 "N/A",
-                MODEL_METADATA_MAPPING[model_name_escaped][0],
+                MODEL_METADATA_MAPPING.get(model_name_escaped, [model_name_escaped])[0],
                 overall_accuracy_live["accuracy"],
                 summary_ast_live["accuracy"],
                 python_simple_ast_live["accuracy"],
@@ -422,7 +423,7 @@ def generate_leaderboard_csv(
         data_multi_turn.append(
             [
                 "N/A",
-                MODEL_METADATA_MAPPING[model_name_escaped][0],
+                MODEL_METADATA_MAPPING.get(model_name_escaped, [model_name_escaped])[0],
                 overall_accuracy_multi_turn["accuracy"],
                 multi_turn_base["accuracy"],
                 multi_turn_miss_func["accuracy"],
@@ -448,8 +449,12 @@ def generate_leaderboard_csv(
             [
                 "N/A",
                 total_overall_accuracy["accuracy"],
-                MODEL_METADATA_MAPPING[model_name_escaped][0],
-                MODEL_METADATA_MAPPING[model_name_escaped][1],
+                MODEL_METADATA_MAPPING.get(
+                    model_name_escaped, [model_name_escaped, model_name_escaped, model_name_escaped, model_name_escaped]
+                )[0],
+                MODEL_METADATA_MAPPING.get(
+                    model_name_escaped, [model_name_escaped, model_name_escaped, model_name_escaped, model_name_escaped]
+                )[1],
                 cost,
                 latency_mean,
                 latency_std,
@@ -476,8 +481,12 @@ def generate_leaderboard_csv(
                 multi_turn_long_context["accuracy"],
                 total_relevance["accuracy"],
                 total_irrelevance["accuracy"],
-                MODEL_METADATA_MAPPING[model_name_escaped][2],
-                MODEL_METADATA_MAPPING[model_name_escaped][3],
+                MODEL_METADATA_MAPPING.get(
+                    model_name_escaped, [model_name_escaped, model_name_escaped, model_name_escaped, model_name_escaped]
+                )[2],
+                MODEL_METADATA_MAPPING.get(
+                    model_name_escaped, [model_name_escaped, model_name_escaped, model_name_escaped, model_name_escaped]
+                )[3],
             ]
         )
 

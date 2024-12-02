@@ -447,7 +447,7 @@ def ast_file_runner(
 
 
 #### Main runner function ####
-def runner(model_names, test_categories, api_sanity_check, result_dir, score_dir):
+def runner(model_names, test_categories, api_sanity_check, result_dir, score_dir, get_handler):
 
     # A flag to indicate if the API has been tested.
     # We should always test the API with ground truth first before running the executable tests.
@@ -482,6 +482,7 @@ def runner(model_names, test_categories, api_sanity_check, result_dir, score_dir
         for model_result_json in subdir.glob("*.json"):
             test_category = extract_test_category(model_result_json)
             if test_categories is not None and test_category not in test_categories:
+                print("Skipping ", test_category)
                 continue
 
             handler = get_handler(model_name_escaped)
