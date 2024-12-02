@@ -49,7 +49,7 @@ class LlamaHandler(OSSHandler):
             decoded_output = []
             for func_call in function_calls:
                 name = func_call["name"]
-                params = func_call["parameters"]
+                params = dict(func_call["parameters"])
                 decoded_output.append({name: params})
 
             return decoded_output
