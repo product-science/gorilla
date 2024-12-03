@@ -1,5 +1,6 @@
 from bfcl.model_handler.oss_model.base_oss_handler import OSSHandler
 from overrides import overrides
+import json
 
 
 # Note: This is the handler for the Llama models in prompring mode.
@@ -32,7 +33,7 @@ class LlamaHandler(OSSHandler):
                 "<|python_tag|>{\"name\": \"calc_binomial_probability\", \"parameters\": {\"n\": \"10\", \"k\": \"3\", \"p\": \"0\"}}; {\"name\": \"calc_binomial_probability\", \"parameters\": {\"n\": \"15\", \"k\": \"5\", \"p\": \"0\"}}; {\"name\": \"calc_binomial_probability\", \"parameters\": {\"n\": \"20\", \"k\": \"7\", \"p\": \"0\"}}"
                 """
                 function_calls = result.split(";")
-                function_calls = [json.loads(func_call) for func_call in function_calls]
+                # function_calls = [json.loads(func_call) for func_call in function_calls]
             elif "=" in result and "(" in result:
                 res = super().decode_ast(result, language)
                 return res
@@ -42,7 +43,7 @@ class LlamaHandler(OSSHandler):
                 """
                 if result.startswith("[") and not result.endswith("]"):
                     result = result + "]"
-                function_calls = eval(result)
+                function_calls = json.loads(result)
                 if type(function_calls) == dict:
                     function_calls = [function_calls]
 
