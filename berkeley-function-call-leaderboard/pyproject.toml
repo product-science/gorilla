@@ -13,7 +13,6 @@ license = { "text" = "Apache 2.0" }
 dependencies = [
     "requests",
     "tqdm",
-    "numpy==1.26.4",
     "pandas",
     "pathlib",
     "huggingface_hub",
